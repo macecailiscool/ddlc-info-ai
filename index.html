@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>DDLC AI Chat</title>
+  <style>
+    /* Paste your CSS code here */
+    BODY {
+      width: 100%;
+      background: #fef;
+      color: #444;
+      margin: 0;
+      font-family: 'Lato', sans-serif;
+      line-height: 1.6em;
+    }
+
+    DT {
+      font-weight: bold;
+      margin-top: .33em;
+      margin-left: 2.5em;
+    }
+
+    H2 {
+      color: #000;
+      margin-left: 0em;
+    }
+
+    H3 {
+      color: #000;
+      margin-left: 1em;
+    }
+
+    p {
+      margin-left: 2.5em;
+    }
+
+    .banner-divider {
+      position: relative;
+      background: #ffbde1;
+      height: 40px;
+    }
+
+    .content {
+      width: 960px;
+      margin: 0px auto;
+      box-sizing: border-box;
+      background: #fff;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, .3);
+    }
+
+    .inner-content {
+      padding: 0px 20px 40px 20px;
+    }
+
+    .editsection {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner-divider"></div>
+  <div class="content">
+    <div class="inner-content">
+      <h2>Welcome to the DDLC AI Chat</h2>
+      <p>Ask any questions related to Doki Doki Literature Club, and the AI will provide answers.</p>
+      
+      <h3>Ask a Question:</h3>
+      <input type="text" id="question-input" placeholder="Type your question here...">
+      <button onclick="askQuestion()">Ask</button>
+      
+      <h3>AI Response:</h3>
+      <p id="response"></p>
+
+      <h3>Questions the AI Can Answer:</h3>
+      <ul id="question-list">
+        <!-- The AI will populate the question list here -->
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // XML data embedded in the JavaScript code
+    var xmlData = `<?xml version="1.0" encoding="UTF-8"?>
+      <database title="DDLC AI Database">
+        <category title="Characters">
+          <entry>
+            <question>Who is the protagonist of DDLC?</question>
+            <answer>The protagonist of DDLC is a character simply referred to as "Player" or "MC" (short for Main Character).</answer>
+          </entry>
+          <entry>
+            <question>What are the names of the four main female characters in DDLC?</question>
+            <answer>The four main female characters in DDLC are Sayori, Yuri, Natsuki, and Monika.</answer>
+          </entry>
+          <!-- Add more character-related questions and answers here -->
+        </category>
+
+        <category title="Storyline">
+          <entry>
+            <question>What is the plot of Doki Doki Literature Club?</question>
+            <answer>Doki Doki Literature Club starts as a typical dating simulator, but it takes a dark turn as the game progresses. The player joins a literature club and interacts with four girls, experiencing unexpected twists and psychological horror elements.</answer>
+          </entry>
+          <entry>
+            <question>Are there multiple endings in DDLC?</question>
+            <answer>Yes, DDLC has multiple endings, including a variety of bad endings and a true ending. The endings are influenced by the player's choices throughout the game.</answer>
+          </entry>
+          <!-- Add more storyline-related questions and answers here -->
+        </category>
+
+        <category title="Development">
+          <entry>
+            <question>Who developed Doki Doki Literature Club?</question>
+            <answer>Doki Doki Literature Club was developed by Team Salvato, a small indie game development team led by Dan Salvato.</answer>
+          </entry>
+          <entry>
+            <question>When was DDLC released?</question>
+            <answer>DDLC was released on September 22, 2017.</answer>
+          </entry>
+          <!-- Add more development-related questions and answers here -->
+        </category>
+
+        <category title="Music">
+          <entry>
+            <question>Who composed the music for DDLC?</question>
+            <answer>The music for DDLC was composed by Dan Salvato.</answer>
+          </entry>
+          <entry>
+            <question>What are some notable tracks from the DDLC soundtrack?</question>
+            <answer>Some notable tracks from the DDLC soundtrack include "Your Reality," "Doki Doki Literature Club!," "Okay, Everyone!," and "Sayo-nara."</answer>
+          </entry>
+          <!-- Add more music-related questions and answers here -->
+        </category>
+      </database>`;
+
+    // Parse the XML data
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(xmlData, "text/xml");
+
+    // Function to process the user's question and generate a response
+    function processQuestion(question) {
+      var response = "I'm sorry, but I don't have an answer to that question.";
+      var entryNodes = xmlDoc.getElementsByTagName("entry");
+      for (var i = 0; i < entryNodes.length; i++) {
+        var questionNode = entryNodes[i].getElementsByTagName("question")[0];
+        var answerNode = entryNodes[i].getElementsByTagName("answer")[0];
+        if (questionNode.textContent.trim().toLowerCase() === question.toLowerCase()) {
+          response = answerNode.textContent.trim();
+          break;
+        }
+      }
+      return response;
+    }
+
+    // Function to handle the user's question and display the AI's response
+    function askQuestion() {
+      var question = document.getElementById("question-input").value;
+      var response = processQuestion(question);
+      document.getElementById("response").textContent = response;
+    }
+
+    // Generate the list of questions the AI can answer
+    function generateQuestionList() {
+      var questionList = document.getElementById("question-list");
+      var entryNodes = xmlDoc.getElementsByTagName("entry");
+      for (var i = 0; i < entryNodes.length; i++) {
+        var questionNode = entryNodes[i].getElementsByTagName("question")[0];
+        var question = questionNode.textContent.trim();
+        var listItem = document.createElement("li");
+        listItem.textContent = question;
+        questionList.appendChild(listItem);
+      }
+    }
+
+    // Call the generateQuestionList() function to populate the question list on page load
+    generateQuestionList();
+  </script>
+</body>
+</html>
